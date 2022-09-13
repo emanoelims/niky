@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model Address {
+  id String @id
+  zip Int 
+  street String
+  number Int
+  neighborhood String
+  city String
+  state String
+  complement String?
+  student Student?
+}
+
+model Student {
+  id String @id
+  name String
+  enroll_student String @unique
+  birth_date DateTime
+  height Int
+  weight Float
+  address Address @relation(fields: [address_id], references: [id])
+  address_id String @unique
+  phones Phone[]
+  enrollClass EnrollClass[]
+  gym_class GymClass?
+}
+
+model AcademicDegree {
+  id String @id
+  name String
+  instructors Instructor[]
+}
+
+model Instructor {
+  id String @id
+  document String @unique
+  name String
+  birth_date DateTime
+  academic_degree AcademicDegree @relation(fields: [academic_degree_id], references: [id])
+  academic_degree_id String
+  phones Phone[]
+  gymClasses GymClass[]
+}
+
+model Phone {
+  id String @id
+  ddd Int
+  number Int
+  instructor Instructor? @relation(fields: [instructor_id], references: [id])
+  instructor_id String? @unique
+  student Student? @relation(fields: [student_id], references: [id])
+  student_id String? @unique
+}
+
+model Activity {
+  id String @id
+  name String 
+  gym_classes GymClass[]
+}
+
+model Lesson {
+  id String @id
+  start_time DateTime 
+  duration DateTime
+  gym_classes GymClass[]
+}
+
+model GymClass {
+  id String @id
+  maximum_student Int 
+  start_date DateTime
+  end_date DateTime
+  active Boolean @default(false)
+  instructor Instructor? @relation(fields: [instructor_id], references: [id])
+  instructor_id String
+  student_monitor Student? @relation(fields: [student_monitor_id], references: [id])
+  student_monitor_id String? @unique
+  activity Activity @relation(fields: [activity_id], references: [id])
+  activity_id String 
+  lesson Lesson @relation(fields: [lesson_id], references: [id])
+  lesson_id String
+  enrollClass EnrollClass[]
+}
+
+model EnrollClass {
+  id String @id
+  gym_class GymClass @relation(fields: [gym_class_id], references: [id])
+  gym_class_id String @unique
+  student Student @relation(fields: [student_id], references: [id])
+  student_id String @unique
+  class_record_book ClassRecordBook?
+  date DateTime
+}
+
+model ClassRecordBook {
+  id String @id
+  present Boolean
+  date DateTime
+  enroll_class EnrollClass @relation(fields: [enroll_class_id], references: [id])
+  enroll_class_id String  @unique
+}
