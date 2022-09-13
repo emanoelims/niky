@@ -5,7 +5,7 @@ interface GymClassApi {
   create: (request: HttpRequest) => Promise<HttpResponse>
   list: (request: HttpRequest) => Promise<HttpResponse>
   findGymClass: (id: string) => Promise<HttpResponse>
-  enrollStudent: (gymClassId: string, studentId: string) => Promise<HttpResponse>
+  enrollStudent: (date: Date, gymClassId: string, studentId: string) => Promise<HttpResponse>
   addStudentMonitor: (gymClassId: string, studentId: string) => Promise<HttpResponse>
   addStudentPresence: (
     date: string,

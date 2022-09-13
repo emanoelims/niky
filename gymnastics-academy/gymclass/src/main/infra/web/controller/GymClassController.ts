@@ -1,17 +1,17 @@
 import GymClassApi from '../GymClassApi'
-import HttpRequest from 'shared/src/main/domain/http/HttpRequest'
-import HttpResponse from 'shared/src/main/domain/http/HttpResponse'
+import HttpRequest from '@shared/domain/http/HttpRequest'
+import HttpResponse from '@shared/domain/http/HttpResponse'
 
-import GymClassRepository from 'gymclass/src/main/domain/GymClassRepository'
+import GymClassRepository from '@gymclass/domain/GymClassRepository'
 
-import CreateGymClass from 'gymclass/src/main/application/CreateGymClass'
-import GetAllGymClasses from 'gymclass/src/main/application/GetAllGymClasses'
-import GetGymClass from 'gymclass/src/main/application/GetGymClass'
-import EnrollStudent from 'gymclass/src/main/application/EnrollStudent'
-import AddStudentMonitor from 'gymclass/src/main/application/AddStudentMonitor'
-import AddStudentPresence from 'gymclass/src/main/application/AddStudentPresence'
-import ActivateGymClass from 'gymclass/src/main/application/ActivateGymClass'
-import GetStudentPresences from 'gymclass/src/main/application/GetStudentPresences'
+import CreateGymClass from '@gymclass/application/CreateGymClass'
+import GetAllGymClasses from '@gymclass/application/GetAllGymClasses'
+import GetGymClass from '@gymclass/application/GetGymClass'
+import EnrollStudent from '@gymclass/application/EnrollStudent'
+import AddStudentMonitor from '@gymclass/application/AddStudentMonitor'
+import AddStudentPresence from '@gymclass/application/AddStudentPresence'
+import ActivateGymClass from '@gymclass/application/ActivateGymClass'
+import GetStudentPresences from '@gymclass//application/GetStudentPresences'
 
 class GymClassController implements GymClassApi {
   constructor(private readonly gymClassRepository: GymClassRepository) {}
@@ -21,8 +21,8 @@ class GymClassController implements GymClassApi {
     const createGymClass = new CreateGymClass(this.gymClassRepository)
     const output = await createGymClass.execute({
       maximumStudents,
-      startDate,
-      endDate,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
       lesson,
       activity,
       instructorId,
@@ -50,13 +50,17 @@ class GymClassController implements GymClassApi {
     }
   }
 
-  public async enrollStudent(gymClassId: string, studentId: string): Promise<HttpResponse> {
+  public async enrollStudent(
+    date: Date,
+    gymClassId: string,
+    studentId: string
+  ): Promise<HttpResponse> {
     const enrollStudent = new EnrollStudent(this.gymClassRepository)
     try {
-      await enrollStudent.execute({ gymClassId, studentId })
+      await enrollStudent.execute({ date, gymClassId, studentId })
       return { statusCode: 201 }
     } catch (e) {
-      return { statusCode: 400 }
+      return { statusCode: 400, body: { error: e.message } }
     }
   }
 
@@ -69,7 +73,8 @@ class GymClassController implements GymClassApi {
       })
       return { statusCode: 201 }
     } catch (e) {
-      return { statusCode: 400 }
+      // @ts-ignore
+      return { statusCode: 400, body: { error: e.message } }
     }
   }
 
@@ -89,7 +94,7 @@ class GymClassController implements GymClassApi {
       })
       return { statusCode: 201 }
     } catch (e) {
-      return { statusCode: 400 }
+      return { statusCode: 400, body: { error: e.message } }
     }
   }
 
@@ -99,7 +104,7 @@ class GymClassController implements GymClassApi {
       await activateGymClass.execute({ gymClassId })
       return { statusCode: 201 }
     } catch (e) {
-      return { statusCode: 400 }
+      return { statusCode: 400, body: { error: e.message } }
     }
   }
 
@@ -117,7 +122,7 @@ class GymClassController implements GymClassApi {
       })
       return { statusCode: 200, body: output }
     } catch (e) {
-      return { statusCode: 400 }
+      return { statusCode: 400, body: e }
     }
   }
 }

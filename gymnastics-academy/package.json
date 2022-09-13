@@ -30,9 +30,9 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
+    "@prisma/client": "4.3.1",
     "date-fns": "^2.29.2",
     "express": "^4.18.1",
-    "pg-promise": "^10.12.0",
     "prisma": "^4.3.1"
   }
 }

@@ -23,6 +23,14 @@ class ClassRecordBookPage {
   get records(): ClassRecordLine[] {
     return this._records
   }
+
+  public getRecords() {
+    return this.records.map((record) => ({
+      date: this.date,
+      studentId: record.studentId,
+      present: record.isPresent,
+    }))
+  }
 }
 
 export default ClassRecordBookPage

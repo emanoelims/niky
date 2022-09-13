@@ -12,8 +12,7 @@ class AddStudentPresence {
 
   public async execute(input: AddStudentPresenceInput): Promise<void> {
     const { gymClassId, date, studentId, isPresent } = input
-    const gymClass = await this.gymClassRepository.findGymClass(gymClassId)
-    gymClass.addStudentPresence(date, studentId, isPresent)
+    await this.gymClassRepository.makeCallStudent(date, gymClassId, studentId, isPresent)
   }
 }
 

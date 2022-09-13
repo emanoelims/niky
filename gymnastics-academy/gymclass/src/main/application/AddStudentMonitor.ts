@@ -16,7 +16,7 @@ class AddStudentMonitor {
       studentId,
       new StudentMonitorService(this.gymClassRepository)
     )
-    await this.gymClassRepository.updateGymClass(gymClass)
+    await this.gymClassRepository.updateGymClass(gymClassId, gymClass)
   }
 }
 

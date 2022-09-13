@@ -1,5 +1,3 @@
-import PhoneNumber from 'shared/src/main/PhoneNumber'
-
 import Student from '../domain/Student'
 import Address from '../domain/Address'
 import StudentRepository from '../domain/StudentRepository'
@@ -21,6 +19,7 @@ interface AddressInput {
 
 interface CreateStudentInput {
   name: string
+  enrollStudent: string
   birthDate: Date
   height: number
   weight: number
@@ -38,6 +37,7 @@ class CreateStudent {
   public async execute({
     name,
     birthDate,
+    enrollStudent,
     height,
     weight,
     phoneNumber,
@@ -45,12 +45,13 @@ class CreateStudent {
   }: CreateStudentInput): Promise<CreateStudentOutput> {
     const student = new Student({
       name,
+      enrollStudent,
       birthDate,
       height,
       weight,
-      phoneNumber: PhoneNumber.of(phoneNumber.ddd, phoneNumber.number),
       address: Address.of(address),
     })
+    student.addPhoneNumber(phoneNumber.ddd, phoneNumber.number)
     await this.studentRepository.addStudent(student)
     return { id: student.id }
   }

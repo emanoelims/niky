@@ -1,62 +1,57 @@
-import { isBefore } from 'date-fns'
-
 import Address from './Address'
-import Entity from 'shared/src/main/domain/Entity'
-import PhoneNumber from 'shared/src/main/PhoneNumber'
+import Entity from '@shared/domain/Entity'
+import PhoneNumber from '@shared/PhoneNumber'
 
 interface StudentParams {
+  id?: string
   name: string
   enrollStudent: string
   birthDate: Date
   height: number
   weight: number
-  phoneNumber: PhoneNumber
   address: Address
+}
+
+interface PhoneNumberParams {
+  ddd: number
+  number: number
 }
 
 class Student extends Entity {
   private readonly _name: string
-  private readonly _erollStudent: string
+  private readonly _enrollStudent: string
   private readonly _birthDate: Date
   private readonly _height: number
   private readonly _weight: number
   private readonly _phoneNumbers: PhoneNumber[] = []
   private readonly _address: Address
 
-  constructor({
-    name,
-    enrollStudent,
-    birthDate,
-    height,
-    weight,
-    phoneNumber,
-    address,
-  }: StudentParams) {
-    super()
+  constructor({ id, name, enrollStudent, birthDate, height, weight, address }: StudentParams) {
+    super(id)
     this._name = name
-    this._erollStudent = enrollStudent
+    this._enrollStudent = enrollStudent
     this._birthDate = birthDate
     this._height = height
     this._weight = weight
-    this._phoneNumbers.push(phoneNumber)
     this._address = address
-    this.validate()
   }
 
   public addPhoneNumber(ddd: number, number: number): void {
     this._phoneNumbers.push(PhoneNumber.of(ddd, number))
   }
 
-  private validate(): void {
-    if (this._name.trim() === '') throw Error('name cannot be null')
-    if (isBefore(Date.now(), this._birthDate)) throw Error('date is not valid')
-    if (this._height <= 0) throw Error('height must be greater than zero')
-    if (this._weight <= 0) throw Error('weight must be greater than zero')
-    if (this._phoneNumbers.length === 0) throw new Error('phoneNumber cannot be null')
+  public addPhoneNumbers(phoneNumbers: PhoneNumberParams[]): void {
+    phoneNumbers.forEach((phoneNumber) => {
+      this.addPhoneNumber(phoneNumber.ddd, phoneNumber.number)
+    })
   }
 
   get name(): string {
     return this._name
+  }
+
+  get enrollStudent(): string {
+    return this._enrollStudent
   }
 
   get birthDate(): Date {

@@ -14,8 +14,8 @@ export default class GymClassRouter {
     })
     http.on('post', '/gymclasses/:gymClassId/enroll', async (request) => {
       const { gymClassId } = request.params
-      const { student_id: studentId } = request.body
-      return await gymClassController.enrollStudent(gymClassId, studentId)
+      const { date, student_id: studentId } = request.body
+      return await gymClassController.enrollStudent(date, gymClassId, studentId)
     })
     http.on('post', '/gymclasses/:gymClassId/activate', async (request) => {
       const { gymClassId } = request.params

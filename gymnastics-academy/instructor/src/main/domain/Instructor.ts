@@ -1,9 +1,10 @@
-import Entity from 'shared/src/main/domain/Entity'
-import PhoneNumber from 'shared/src/main/PhoneNumber'
+import Entity from '@shared/domain/Entity'
+import PhoneNumber from '@shared/PhoneNumber'
 
 import AcademicDegree from './AcademicDegree'
 
 interface InstructorParams {
+  id?: string
   document: string
   name: string
   birthDate: Date
@@ -22,8 +23,8 @@ class Instructor extends Entity {
   private _academicDegree: AcademicDegree
   private readonly _phoneNumbers: PhoneNumber[] = []
 
-  constructor({ document, name, birthDate, academicDegree }: InstructorParams) {
-    super()
+  constructor({ id, document, name, birthDate, academicDegree }: InstructorParams) {
+    super(id)
     this._document = document
     this._name = name
     this._birthDate = birthDate

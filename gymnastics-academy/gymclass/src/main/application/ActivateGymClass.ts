@@ -10,7 +10,7 @@ class ActivateGymClass {
   public async execute({ gymClassId }: ActivateGymClassInput): Promise<void> {
     const gymClass = await this.gymClassRepository.findGymClass(gymClassId)
     gymClass.activate()
-    await this.gymClassRepository.updateGymClass(gymClass)
+    await this.gymClassRepository.updateGymClass(gymClassId, gymClass)
   }
 }
 

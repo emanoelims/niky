@@ -11,10 +11,11 @@ class StudentController implements StudentApi {
   constructor(private readonly studentRepository: StudentRepository) {}
 
   public async create(request: HttpRequest): Promise<HttpResponse> {
-    const { name, birthDate, height, weight, phoneNumber, address } = request.body
+    const { name, enrollStudent, birthDate, height, weight, phoneNumber, address } = request.body
     const createStudent = new CreateStudent(this.studentRepository)
     const output = await createStudent.execute({
       name,
+      enrollStudent,
       birthDate: new Date(birthDate),
       height: parseInt(height),
       weight: parseFloat(weight),

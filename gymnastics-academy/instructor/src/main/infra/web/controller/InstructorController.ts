@@ -15,7 +15,7 @@ class InstructorController implements InstructorApi {
     const output = await createInstructor.execute({
       document,
       name,
-      birthDate,
+      birthDate: new Date(birthDate),
       phoneNumbers,
       academicDegree,
     })
